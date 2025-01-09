@@ -52,4 +52,57 @@ class PatientController extends Controller
 
         return response()->json(['message' => 'Successfully registeres'], 201);
     }
+
+    //obtener un paciente por su id
+    public function patient_by_id($id){
+        $validator = Validator::make(['id' => $id], [
+            'id' => 'required|numeric'
+        ]);
+
+        //validando si se rompe las reglas de entrada de datos
+        if($validator->fails()){
+            return response()->json([
+                'message' => 'Validation Error',
+                'errors' => $validator->errors()
+            ], 400);
+        }
+
+        //select * from patients where id = $id
+        //Patient::where('id',$id)->get(); //query builder + orm
+        $patient = Patient::find($id); //{}, null
+
+        if($patient != null){
+            return response()->json($patient, 200);
+        }
+        return response()->json(['message' => 'Patient not found'], 404);
+    }
+
+    //metodo para actualizar un paciente
+    public function update(Request $request, $id){
+        $validator = Validator::make($request->all(), [
+            //reglas para validar
+            'name' => 'required|string|max:50',
+            'address' => 'required|string',
+            'phone' => 'required|digits:8',
+            'email' => 'email|nullable'
+        ]);
+
+        //validando si se rompe las reglas de entrada de datos
+        if($validator->fails()){
+            return response()->json([
+                'message' => 'Validation Error',
+                'errors' => $validator->errors()
+            ], 400);
+        }
+        
+        //nueva instancia
+        $patient = Patient::find($id); //{}
+        $patient->name = $request->input('name');
+        $patient->address = $request->input('address');
+        $patient->phone = $request->input('phone');
+        $patient->email = $request->input('email');
+        $patient->update(); //UPDATE SET....
+
+        return response()->json(['message' => 'Correctly updated'], 200);
+    }
 }
