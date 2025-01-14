@@ -64,7 +64,7 @@ class AppointmentsController extends Controller
 
         //validando parametros opcionales
         $start_date = $request->query('start_date');
-        $end_date = $request->query('start_date');
+        $end_date = $request->query('end_date');
 
         if($start_date && $end_date){
             $query_appointments->whereBetween('date_appointment', [$start_date, $end_date]);
@@ -73,4 +73,7 @@ class AppointmentsController extends Controller
         $data = $query_appointments->get();
         return response()->json($data, 200);
     }
+
+    //todo los pacientes en base al doctor
+    //validacion
 }
