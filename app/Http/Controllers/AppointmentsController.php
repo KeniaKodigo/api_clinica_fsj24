@@ -5,10 +5,45 @@ namespace App\Http\Controllers;
 use App\Models\Appointments;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+/**
+ * @OA\Tag(name="Appointments", description="API for managing appointments")
+ */
 
 class AppointmentsController extends Controller
 {
     //metodo para guardar una cita
+    /**
+     * @OA\Post(
+     *     path="/api/v1/appointments",
+     *     summary="Register a new appointment",
+     *     tags={"Appointments"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="patient_id", type="integer", example=1, description="ID del paciente"),
+     *             @OA\Property(property="user_id", type="integer", example=2, description="ID del usuario (doctor)"),
+     *             @OA\Property(property="date_appointment", type="string", format="date", example="2025-01-20", description="Fecha de la cita"),
+     *             @OA\Property(property="time_appointment", type="string", format="time", example="14:30", description="Hora de la cita en formato 24 horas"),
+     *             @OA\Property(property="reason", type="string", example="Consulta general", description="Motivo de la cita")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Appointment successfully registered",
+     *         @OA\JsonContent(@OA\Property(property="message", type="string", example="Successfully registered"))
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Validation Error",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="Validation Error"),
+     *             @OA\Property(property="errors", type="object")
+     *         )
+     *     )
+     * )
+     */
     public function store(Request $request){
         //validando la entrada de datos del usuario
         $validator = Validator::make($request->all(), [
@@ -44,6 +79,41 @@ class AppointmentsController extends Controller
     }
 
     //SELECT * FROM appointments WHERE date_appointment BETWEEN  "2025-01-10" AND "2025-02-15"
+    /**
+     * @OA\Get(
+     *     path="/api/v1/appointments",
+     *     summary="Get appointments in a date range",
+     *     tags={"Appointments"},
+     *     @OA\Parameter(
+     *         name="start_date",
+     *         in="query",
+     *         description="Fecha de inicio (opcional)",
+     *         required=false,
+     *         @OA\Schema(type="string", format="date", example="2025-01-10")
+     *     ),
+     *     @OA\Parameter(
+     *         name="end_date",
+     *         in="query",
+     *         description="Fecha de fin (opcional)",
+     *         required=false,
+     *         @OA\Schema(type="string", format="date", example="2025-02-15")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Lista de citas",
+     *         @OA\JsonContent(type="array", @OA\Items(type="object"))
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Validation Error",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="Validation Error"),
+     *             @OA\Property(property="errors", type="object")
+     *         )
+     *     )
+     * )
+     */
     public function get_appointments(Request $request){
         //validando las fechas
         $validator = Validator::make($request->all(), [
@@ -76,7 +146,29 @@ class AppointmentsController extends Controller
 
     //todo los pacientes en base al doctor
     //validacion
-
+    /**
+     * @OA\Get(
+     *     path="/api/v1/patients-doctor",
+     *     summary="Get patients assigned to a doctor",
+     *     tags={"Appointments"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="List of patients assigned to the doctor",
+     *         @OA\JsonContent(type="array", @OA\Items(
+     *             @OA\Property(property="patient", type="string", example="Juan Pérez"),
+     *             @OA\Property(property="date_born", type="string", format="date", example="1990-05-15"),
+     *             @OA\Property(property="gender", type="string", example="Masculino"),
+     *             @OA\Property(property="doctor", type="string", example="Dr. Carlos López")
+     *         ))
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="Acceso denegado",
+     *         @OA\JsonContent(@OA\Property(property="mensaje", type="string", example="Solo doctores tienen acceso a esta información"))
+     *     )
+     * )
+     */
     public function get_patients_by_doctor(Request $request){
         $user = $request->user();
         /**select patients.name as patient, patients.date_born, users.name as doctor from appointments 
