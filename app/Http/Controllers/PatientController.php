@@ -105,4 +105,10 @@ class PatientController extends Controller
 
         return response()->json(['message' => 'Correctly updated'], 200);
     }
+
+
+    public function sumar(){
+        $suma = 7 + 8;
+        return $suma;
+    }
 }
