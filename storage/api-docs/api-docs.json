@@ -1,7 +1,7 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "Laravel V11 Patient and Appointment Management API",
+        "title": "Laravel V11 Patient and Appointment Management API - FSJ24 y FSJ25",
         "version": "1.0.0"
     },
     "paths": {
@@ -354,7 +354,7 @@
                 },
                 "security": [
                     {
-                        "sanctum": []
+                        "bearerAuth": []
                     }
                 ]
             }
@@ -456,7 +456,7 @@
                 "operationId": "6ded7d1178c54fde883804809faab439",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "patientId",
                         "in": "path",
                         "description": "Patient ID",
                         "required": true,
@@ -489,7 +489,7 @@
                 "operationId": "59a13839cf9a82442254de945e70709a",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "patientId",
                         "in": "path",
                         "description": "Patient ID to be updated",
                         "required": true,

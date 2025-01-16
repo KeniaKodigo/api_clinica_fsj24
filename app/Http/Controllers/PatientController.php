@@ -110,7 +110,7 @@ class PatientController extends Controller
      *     tags={"Patients"},
      *     security={{"bearerAuth": {}}},
      *     @OA\Parameter(
-     *         name="id",
+     *         name="patientId",
      *         in="path",
      *         description="Patient ID",
      *         required=true,
@@ -158,7 +158,7 @@ class PatientController extends Controller
      *     tags={"Patients"},
      *     security={{"bearerAuth": {}}},
      *     @OA\Parameter(
-     *         name="id",
+     *         name="patientId",
      *         in="path",
      *         description="Patient ID to be updated",
      *         required=true,
@@ -212,3 +212,5 @@ class PatientController extends Controller
         return response()->json(['message' => 'Correctly updated'], 200);
     }
 }
+
+//mocks

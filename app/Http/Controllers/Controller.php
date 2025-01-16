@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 /**
  * @OA\Info(
- *     title="Laravel V11 Patient and Appointment Management API",
+ *     title="Laravel V11 Patient and Appointment Management API - FSJ24 y FSJ25",
  *     version="1.0.0"
  * )
  * 
